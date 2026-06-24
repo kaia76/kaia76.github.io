@@ -4,6 +4,57 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
+<style>
+  /* ===== レスポンシブ対応（スマホ・タブレット） ===== */
+  @media (max-width: 768px) {
+    /* 横スクロールを防止（この画面幅ではsticky演出を解除済みなので安全） */
+    html, body { max-width: 100%; overflow-x: hidden; }
+
+    /* --- 2〜3カラムのグリッドを縦積みに --- */
+    div[style*="grid-template-columns:1.1fr 1fr"],
+    div[style*="grid-template-columns:1.5fr 1fr"],
+    div[style*="grid-template-columns:1fr 1fr"] {
+      grid-template-columns: 1fr !important;
+    }
+    /* AUTO NOTE フロー：3ステップを縦並びに */
+    div[style*="grid-template-columns:repeat(3,1fr)"] {
+      grid-template-columns: 1fr !important;
+      gap: 28px !important;
+    }
+    /* ノートテンプレート：6枚→3枚並びに */
+    div[style*="grid-template-columns:repeat(6,1fr)"] {
+      grid-template-columns: repeat(3, 1fr) !important;
+    }
+
+    /* --- ピン留めスクロール演出を解除し、通常スクロールで流す --- */
+    [data-pin] { height: auto !important; }
+    [data-pin-inner] {
+      position: static !important;
+      height: auto !important;
+      min-height: 0 !important;
+      justify-content: flex-start !important;
+    }
+
+    /* --- スクロール演出で薄くなる要素を、スマホでは確実に表示 --- */
+    [data-step] { opacity: 1 !important; }
+    [data-spread-card] { opacity: 1 !important; transform: none !important; }
+
+    /* About のサイド情報をスマホでは固定しない */
+    aside[data-reveal] { position: static !important; top: auto !important; }
+
+    /* ナビの余白を詰める */
+    nav { padding-left: 18px !important; padding-right: 18px !important; }
+  }
+
+  @media (max-width: 480px) {
+    /* 小さい画面ではノートテンプレートを2枚並びに */
+    div[style*="grid-template-columns:repeat(6,1fr)"] {
+      grid-template-columns: repeat(2, 1fr) !important;
+    }
+    /* ナビのリンク間隔を少し詰める */
+    nav > div { gap: 12px !important; }
+  }
+</style>
 </head>
 <body>
 <x-dc>
