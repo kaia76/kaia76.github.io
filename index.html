@@ -607,5 +607,51 @@ class Component extends DCLogic {
   }
 }
 </script>
+
+<!-- ▼ 動画を確実に再生させるフォールバック（フレームワーク非依存・追記） -->
+<script>
+(function () {
+  function setup(v) {
+    if (v.__autoReady) return;
+    v.__autoReady = true;
+    v.muted = true;
+    v.defaultMuted = true;
+    v.loop = true;
+    v.playsInline = true;
+    v.setAttribute('muted', '');
+    v.setAttribute('playsinline', '');
+    v.setAttribute('autoplay', '');
+    v.preload = 'auto';
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) {
+        if (e.isIntersecting) {
+          var p = e.target.play();
+          if (p && p.catch) p.catch(function () {});
+        } else {
+          e.target.pause();
+        }
+      });
+    }, { threshold: 0.25 });
+    io.observe(v);
+    var pp = v.play();
+    if (pp && pp.catch) pp.catch(function () {});
+  }
+  function scan() {
+    var vids = document.querySelectorAll('video');
+    for (var i = 0; i < vids.length; i++) setup(vids[i]);
+  }
+  scan();
+  window.addEventListener('load', scan);
+  // React renders asynchronously after the CDN scripts load —
+  // catch each video the moment it is inserted into the DOM.
+  if (window.MutationObserver) {
+    new MutationObserver(scan).observe(document.documentElement, {
+      childList: true,
+      subtree: true
+    });
+  }
+})();
+</script>
+
 </body>
 </html>
