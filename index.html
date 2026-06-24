@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  html { scroll-behavior: smooth; }
+  body { margin: 0; background: #F4F2EC; color: #0E0E0E; -webkit-font-smoothing: antialiased; }
+  ::selection { background: #FB98A7; color: #fff; }
+  @keyframes mk-marquee { from { transform: translate3d(0,0,0); } to { transform: translate3d(-50%,0,0); } }
+  @keyframes mk-blink { 0%,49% { opacity: 1; } 50%,100% { opacity: 0; } }
+  @keyframes mk-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-12px); } }
+  @keyframes mk-bob { 0%,100% { transform: translateY(0); } 50% { transform: translateY(8px); } }
+  @keyframes mk-drift1 { 0%,100% { transform: translate(0,0) scale(1); } 33% { transform: translate(6vw,-4vh) scale(1.08); } 66% { transform: translate(-4vw,5vh) scale(0.95); } }
+  @keyframes mk-drift2 { 0%,100% { transform: translate(0,0) scale(1); } 50% { transform: translate(-7vw,6vh) scale(1.12); } }
+  @keyframes mk-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+  @keyframes mk-spin-rev { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
+  @keyframes mk-dash { to { stroke-dashoffset: -1000; } }
+  @keyframes mk-pulse { 0%,100% { transform: scale(1); opacity:0.5; } 50% { transform: scale(1.35); opacity:0.9; } }
+</style>
+</helmet>
+
+<div ref="{{ rootRef }}" style="font-family:'Noto Sans JP',sans-serif; position:relative;">
+
+  <!-- progress bar -->
+  <div style="position:fixed; top:0; left:0; right:0; height:3px; z-index:100; background:transparent; pointer-events:none;">
+    <div data-bar style="height:100%; width:100%; background:var(--accent,#FB98A7); transform:scaleX(0); transform-origin:left center;"></div>
+  </div>
+
+  <!-- nav -->
+  <nav style="position:fixed; top:0; left:0; right:0; z-index:90; display:flex; align-items:center; justify-content:space-between; padding:22px clamp(20px,4vw,52px); mix-blend-mode:difference; color:#fff; pointer-events:none;">
+    <a href="#top" style="pointer-events:auto; text-decoration:none; color:#fff; font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.14em; font-weight:700;">村澤渓花／Kaia</a>
+    <div style="display:flex; gap:clamp(14px,2vw,28px); font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.16em;">
+      <a href="#about" style="pointer-events:auto; text-decoration:none; color:#fff;">ABOUT</a>
+      <a href="#work" style="pointer-events:auto; text-decoration:none; color:#fff;">WORK</a>
+      <a href="#contact" style="pointer-events:auto; text-decoration:none; color:#fff;">CONTACT</a>
+    </div>
+  </nav>
+
+  <div id="top"></div>
+
+  <!-- ============ HERO : EDITORIAL ============ -->
+  <sc-if value="{{ isEditorial }}" hint-placeholder-val="{{ true }}">
+  <section data-screen-label="Hero — Editorial" style="min-height:100vh; padding:clamp(80px,10vh,120px) clamp(20px,4vw,52px) clamp(28px,5vh,52px); display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; background:#F4F2EC;">
+    <div data-parallax data-speed="0.10" style="position:absolute; right:-8vw; top:14vh; width:46vw; height:46vw; max-width:680px; max-height:680px; border-radius:50%; background:var(--accent,#FB98A7); z-index:0;"></div>
+    <div data-parallax data-speed="0.22" style="position:absolute; left:6vw; bottom:18vh; width:14px; height:14px; border-radius:50%; background:#0E0E0E; z-index:1;"></div>
+
+    <div style="display:flex; justify-content:space-between; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.18em; color:#6E6A62; position:relative; z-index:2;">
+      <span>PRODUCT DESIGNER — DESIGNS &amp; BUILDS</span>
+      <span style="color:#0E0E0E;">PORTFOLIO ’26</span>
+    </div>
+
+    <div style="position:relative; z-index:2; max-width:1200px;">
+      <div style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.2em; color:var(--accent,#FB98A7); margin-bottom:clamp(16px,2vw,26px);">設計から、実装まで。</div>
+      <h1 style="margin:0; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:700; font-size:clamp(72px,17vw,260px); line-height:0.88; letter-spacing:-0.02em;">村澤渓花</h1>
+      <div style="display:flex; align-items:baseline; gap:18px; flex-wrap:wrap; margin-top:clamp(14px,2vw,22px);">
+        <span style="font-family:'Space Grotesk',sans-serif; font-size:clamp(18px,2.4vw,30px); font-weight:500; letter-spacing:0.02em;">Keika Murasawa</span>
+        <span style="font-size:clamp(14px,1.3vw,18px); color:#6E6A62; line-height:1.7;">アイデアを、自分の手で動くプロダクトにする。</span>
+      </div>
+    </div>
+
+    <div style="display:flex; justify-content:space-between; align-items:flex-end; position:relative; z-index:2; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.16em; color:#6E6A62;">
+      <span style="display:inline-flex; flex-direction:column; gap:6px;"><span>SCROLL</span><span style="animation:mk-bob 1.8s ease-in-out infinite; font-size:16px;">↓</span></span>
+      <span style="text-align:right;">SELECTED WORK<br><span style="color:#0E0E0E;">AUTO NOTE / TYPIC</span></span>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ============ HERO : KINETIC ============ -->
+  <sc-if value="{{ isKinetic }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Hero — Kinetic" style="min-height:100vh; padding:clamp(80px,10vh,120px) clamp(20px,4vw,52px) 0; display:flex; flex-direction:column; justify-content:space-between; position:relative; overflow:hidden; background:#0C0C0C; color:#F4F2EC;">
+    <div style="display:flex; justify-content:space-between; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.18em; color:#8A867D; position:relative; z-index:2;">
+      <span>村澤渓花 — KEIKA MURASAWA</span>
+      <span>PRODUCT DESIGNER ’26</span>
+    </div>
+
+    <div style="position:relative; z-index:2;">
+      <h1 style="margin:0; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(64px,16vw,250px); line-height:0.86; letter-spacing:-0.03em; text-transform:uppercase;">
+        <span style="display:block; overflow:hidden;"><span data-reveal style="display:inline-block; opacity:0; transform:translateY(110%); transition:transform 1s cubic-bezier(.16,1,.3,1), opacity 1s cubic-bezier(.16,1,.3,1); will-change:transform,opacity;">Design</span></span>
+        <span style="display:block; overflow:hidden;"><span data-reveal style="display:inline-block; opacity:0; transform:translateY(110%); transition:transform 1s cubic-bezier(.16,1,.3,1) .08s, opacity 1s cubic-bezier(.16,1,.3,1) .08s; will-change:transform,opacity; color:var(--accent,#FB98A7);">Build</span></span>
+        <span style="display:block; overflow:hidden;"><span data-reveal style="display:inline-block; opacity:0; transform:translateY(110%); transition:transform 1s cubic-bezier(.16,1,.3,1) .16s, opacity 1s cubic-bezier(.16,1,.3,1) .16s; will-change:transform,opacity;">Ship.</span></span>
+      </h1>
+      <p style="max-width:520px; margin:clamp(20px,3vw,32px) 0 0; font-size:clamp(15px,1.4vw,20px); line-height:1.8; color:#C9C5BC;">デザインと実装のあいだに線を引かない。企画から動くプロダクトまで、ひとりで届けます。</p>
+    </div>
+
+    <div style="position:relative; z-index:2; margin:0 calc(-1 * clamp(20px,4vw,52px)); border-top:1px solid rgba(255,255,255,.16); border-bottom:1px solid rgba(255,255,255,.16); overflow:hidden; white-space:nowrap;">
+      <div style="display:inline-block; animation:mk-marquee 22s linear infinite; padding:16px 0; font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:clamp(20px,3vw,40px); letter-spacing:0.02em;">
+        <span style="padding:0 28px;">村澤渓花</span><span style="padding:0 28px; color:var(--accent,#FB98A7);">AUTO NOTE</span><span style="padding:0 28px;">PRODUCT DESIGNER</span><span style="padding:0 28px; color:var(--accent,#FB98A7);">TYPIC</span><span style="padding:0 28px;">村澤渓花</span><span style="padding:0 28px; color:var(--accent,#FB98A7);">AUTO NOTE</span><span style="padding:0 28px;">PRODUCT DESIGNER</span><span style="padding:0 28px; color:var(--accent,#FB98A7);">TYPIC</span>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ============ HERO : INDEX ============ -->
+  <sc-if value="{{ isIndex }}" hint-placeholder-val="{{ false }}">
+  <section data-screen-label="Hero — Index" style="min-height:100vh; padding:clamp(56px,9vh,86px) clamp(20px,4vw,52px) clamp(4px,1vh,10px); display:flex; flex-direction:column; justify-content:flex-start; gap:clamp(48px,9vh,112px); position:relative; overflow:hidden; background:#F4F2EC;">
+    <div data-hero-motion style="position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
+      <canvas data-flow-canvas style="position:absolute; inset:0; width:100%; height:100%; opacity:0.95;"></canvas>
+      <div data-parallax data-speed="0.06" style="position:absolute; right:-10vw; top:8vh; width:42vw; height:42vw; max-width:560px; max-height:560px; border-radius:50%; background:radial-gradient(circle at 35% 35%, rgba(251,152,167,0.42), rgba(251,152,167,0) 70%); animation:mk-drift1 26s ease-in-out infinite; will-change:transform;"></div>
+      <div data-parallax data-speed="0.12" style="position:absolute; left:-8vw; bottom:-6vh; width:34vw; height:34vw; max-width:440px; max-height:440px; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(255,214,196,0.38), rgba(255,214,196,0) 72%); animation:mk-drift2 32s ease-in-out infinite; will-change:transform;"></div>
+    </div>
+    <div style="display:flex; align-items:flex-start; width:100%; position:relative; z-index:1;">
+      <div style="display:flex; flex-direction:column; gap:clamp(8px,1.2vw,16px); min-width:0; position:relative; z-index:1;">
+        <div style="font-family:'Noto Sans JP',sans-serif; font-weight:700; font-size:clamp(18px,2.4vw,34px); letter-spacing:0.3em; color:#A8A49B; line-height:1; padding-left:0.1em;">村澤渓花</div>
+        <h1 style="margin:0; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(72px,17vw,264px); line-height:0.84; letter-spacing:-0.01em; color:transparent; -webkit-text-stroke:clamp(1.2px,0.18vw,2.6px) #0E0E0E;">Kaia<span style="color:var(--accent,#FB98A7); -webkit-text-stroke:0;">.</span></h1>
+        <span aria-label="Murasawa Keika" style="display:flex; justify-content:space-between; width:100%; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3.4vw,52px); line-height:1; color:#FFFFFF;"><span>M</span><span>u</span><span>r</span><span>a</span><span>s</span><span>a</span><span>w</span><span>a</span><span style="flex:0 0 0.55em;"></span><span>K</span><span>e</span><span>i</span><span>k</span><span>a</span></span>
+      </div>
+    </div>
+    <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(28px,5vw,72px); align-items:end; position:relative; z-index:1;">
+      <h1 style="margin:0; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:700; font-size:clamp(48px,9vw,150px); line-height:0.9; letter-spacing:-0.02em;">My<br>Portfolio<span style="color:var(--accent,#FB98A7);">.</span></h1>
+      <div style="display:flex; flex-direction:column;">
+        <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
+          <span style="width:36px; height:7px; background:var(--accent,#FB98A7); flex:0 0 auto;"></span>
+          <div style="font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:700; font-size:clamp(18px,2vw,28px); letter-spacing:0.01em; line-height:1.1; color:#0E0E0E; white-space:nowrap;"><span style="color:var(--accent,#FB98A7);">AI</span>を<span style="color:var(--accent,#FB98A7);">組み込んだ</span>アプリ</div>
+        </div>
+        <div style="display:flex; flex-direction:column; border-top:1px solid rgba(14,14,14,.18);">
+        <div style="display:flex; gap:18px; padding:22px 0; border-bottom:1px solid rgba(14,14,14,.18);">
+          <span style="font-family:'Space Mono',monospace; color:var(--accent,#FB98A7); font-size:13px; letter-spacing:0.1em;">01</span>
+          <div><div style="font-family:'Space Grotesk',sans-serif; font-weight:600; font-size:clamp(22px,2.6vw,34px); letter-spacing:0.01em;">AUTO NOTE</div><div style="color:#6E6A62; font-size:14px; line-height:1.7; margin-top:6px;">スケジュール登録→自動録音→文字起こし→ノート生成まで。</div></div>
+        </div>
+      </div>
+      </div>
+    </div>
+  </section>
+  </sc-if>
+
+  <!-- ============ ABOUT ============ -->
+  <section id="about" data-screen-label="About" style="padding:clamp(90px,16vh,200px) clamp(20px,4vw,52px); background:#F4F2EC; position:relative;">
+    <h2 style="margin:0 0 clamp(48px,8vw,110px); font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:500; font-size:clamp(32px,6vw,92px); line-height:1.4; letter-spacing:-0.01em;">
+      <span style="display:block; overflow:hidden; padding-bottom:0.06em;"><span data-reveal-line style="display:inline-block; opacity:0; transform:translateY(105%); transition:opacity .9s cubic-bezier(.16,1,.3,1), transform .9s cubic-bezier(.16,1,.3,1); will-change:opacity,transform;">農業からITへ。</span></span>
+      <span style="display:block; overflow:hidden; padding-bottom:0.06em;"><span data-reveal-line style="display:inline-block; opacity:0; transform:translateY(105%); transition:opacity .9s cubic-bezier(.16,1,.3,1) .1s, transform .9s cubic-bezier(.16,1,.3,1) .1s; will-change:opacity,transform;">常に学び続け、</span></span>
+      <span style="display:block; overflow:hidden; padding-bottom:0.06em;"><span data-reveal-line style="display:inline-block; opacity:0; transform:translateY(105%); transition:opacity .9s cubic-bezier(.16,1,.3,1) .2s, transform .9s cubic-bezier(.16,1,.3,1) .2s; will-change:opacity,transform;"><span style="color:#1B3A6B;">不便</span>を<span style="color:var(--accent,#FB98A7);">便利</span>に変えられる</span></span>
+      <span style="display:block; overflow:hidden; padding-bottom:0.06em;"><span data-reveal-line style="display:inline-block; opacity:0; transform:translateY(105%); transition:opacity .9s cubic-bezier(.16,1,.3,1) .3s, transform .9s cubic-bezier(.16,1,.3,1) .3s; will-change:opacity,transform;">エンジニアを目指しています。</span></span>
+    </h2>
+
+    <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:clamp(36px,7vw,110px); align-items:start;">
+      <div style="opacity:1;">
+        <p data-reveal style="margin:0 0 32px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:500; font-size:clamp(19px,1.9vw,28px); line-height:1.55; color:#0E0E0E; letter-spacing:-0.01em; opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.16,1,.3,1) 0s, transform .7s cubic-bezier(.16,1,.3,1) 0s; will-change:opacity,transform;">誰かの「<span style="color:#1B3A6B;">不便</span>」を「<span style="color:var(--accent,#FB98A7);">便利</span>」に変えるアプリをつくりたい。</p>
+        <p data-reveal style="margin:0 0 20px; font-size:clamp(15px,1.25vw,18px); line-height:2; color:#3A3833; opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.16,1,.3,1) .1s, transform .7s cubic-bezier(.16,1,.3,1) .1s; will-change:opacity,transform;">私は農業関連企業で働く中で、紙や電話、手作業による管理など、アナログな業務が多く残る現場を数多く経験してきました。一方で、ITを活用することで業務効率や情報共有が大きく改善される場面も目の当たりにし、技術の力で人の役に立つ仕組みをつくりたいと考えるようになりました。</p>
+        <p data-reveal style="margin:0 0 20px; font-size:clamp(15px,1.25vw,18px); line-height:2; color:#3A3833; opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.16,1,.3,1) .2s, transform .7s cubic-bezier(.16,1,.3,1) .2s; will-change:opacity,transform;">現在はIT業界への転身を目指し、職業訓練校にてJavaを中心に、Spring Framework、HTML/CSS、JavaScript、SQLなどを学習しています。</p>
+        <p data-reveal style="margin:0 0 20px; font-size:clamp(15px,1.25vw,18px); line-height:2; color:#3A3833; opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.16,1,.3,1) .3s, transform .7s cubic-bezier(.16,1,.3,1) .3s; will-change:opacity,transform;">また学習と並行して、AIを活用した個人開発にも取り組んでいます。「こんなサービスがあったら便利」「自分自身が本当に使いたい」と感じたアイデアを形にし、授業や会議内容を自動で整理するAIノート作成アプリや、タイピング型英語学習アプリを制作しました。</p>
+        <p data-reveal style="margin:0 0 20px; font-size:clamp(15px,1.25vw,18px); line-height:2; color:#3A3833; opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.16,1,.3,1) .4s, transform .7s cubic-bezier(.16,1,.3,1) .4s; will-change:opacity,transform;">実際の課題や日常の気づきから着想を得て、AIを組み込んだ、今の時代に求められる実用的な機能を意識して開発しています。</p>
+        <p data-reveal style="margin:0; font-size:clamp(15px,1.25vw,18px); line-height:2; color:#3A3833; opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.16,1,.3,1) .5s, transform .7s cubic-bezier(.16,1,.3,1) .5s; will-change:opacity,transform;">これからも学び続ける姿勢を大切にしながら、利用者視点で本当に価値のあるサービスを生み出せるエンジニアを目指しています。</p>
+      </div>
+
+      <aside data-reveal style="position:sticky; top:96px; opacity:0; transform:translateY(38px); transition:opacity .8s cubic-bezier(.16,1,.3,1) .7s, transform .8s cubic-bezier(.16,1,.3,1) .7s; will-change:opacity,transform;">
+        <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.2em; color:var(--accent,#FB98A7); margin-bottom:18px;">STACK</div>
+        <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(30px,4vw,44px);">
+          <span style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.02em; padding:9px 16px; border:1px solid rgba(14,14,14,.22); border-radius:999px;">Java</span>
+          <span style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.02em; padding:9px 16px; border:1px solid rgba(14,14,14,.22); border-radius:999px;">Spring Framework</span>
+          <span style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.02em; padding:9px 16px; border:1px solid rgba(14,14,14,.22); border-radius:999px;">HTML / CSS</span>
+          <span style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.02em; padding:9px 16px; border:1px solid rgba(14,14,14,.22); border-radius:999px;">JavaScript</span>
+          <span style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.02em; padding:9px 16px; border:1px solid rgba(14,14,14,.22); border-radius:999px;">SQL</span>
+        </div>
+        <div style="display:flex; flex-direction:column; gap:0; font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.04em;">
+          <div style="display:flex; justify-content:space-between; padding:14px 0; border-top:1px solid rgba(14,14,14,.14);"><span style="color:#6E6A62;">PREVIOUS</span><span>Agricultural Staff</span></div>
+          <div style="display:flex; justify-content:space-between; padding:14px 0; border-top:1px solid rgba(14,14,14,.14);"><span style="color:#6E6A62;">GOAL</span><span>Software Engineer</span></div>
+          <div style="display:flex; justify-content:space-between; padding:14px 0; border-top:1px solid rgba(14,14,14,.14); border-bottom:1px solid rgba(14,14,14,.14);"><span style="color:#6E6A62;">BASED</span><span>Hokkaido, Obihiro</span></div>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============ AUTO NOTE (dark) ============ -->
+  <section id="work" data-screen-label="AUTO NOTE — intro" style="background:#0C0C0C; color:#F4F2EC; padding:clamp(80px,14vh,180px) clamp(20px,4vw,52px) clamp(40px,8vh,90px); position:relative; overflow:hidden;">
+    <div aria-hidden="true" style="position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
+      <svg data-parallax data-speed="0.10" viewBox="0 0 300 300" style="position:absolute; left:-6vw; top:-8vh; width:clamp(220px,30vw,460px); height:clamp(220px,30vw,460px); animation:mk-spin 60s linear infinite; will-change:transform;"><circle cx="150" cy="150" r="148" fill="none" stroke="rgba(255,255,255,0.07)" stroke-width="1" stroke-dasharray="1 12"></circle><circle cx="150" cy="150" r="104" fill="none" stroke="rgba(251,152,167,0.22)" stroke-width="1"></circle></svg>
+      <div data-parallax data-speed="0.16" style="position:absolute; right:-6vw; bottom:-10vh; width:30vw; height:30vw; max-width:420px; max-height:420px; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(251,152,167,0.20), rgba(251,152,167,0) 70%); animation:mk-drift1 30s ease-in-out infinite; will-change:transform;"></div>
+      <div style="position:absolute; right:22vw; top:18vh; width:8px; height:8px; border-radius:50%; background:var(--accent,#FB98A7); animation:mk-pulse 5s ease-in-out infinite;"></div>
+    </div>
+    <div style="display:flex; justify-content:space-between; align-items:baseline; flex-wrap:wrap; gap:12px; position:relative; z-index:1;">
+      <span style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.2em; color:var(--accent,#FB98A7);">01 / AUTO NOTE</span>
+      <span style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.16em; color:#8A867D;">RECORDING · TRANSCRIPTION · AI NOTES</span>
+    </div>
+    <h2 data-parallax data-speed="0.05" style="margin:clamp(24px,4vw,48px) 0 0; position:relative; z-index:1; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(64px,16vw,280px); line-height:0.86; letter-spacing:-0.03em;">AUTO<br>NOTE</h2>
+    <div style="display:flex; justify-content:flex-end; align-items:center; gap:10px; flex-wrap:wrap; margin-top:clamp(16px,2vw,24px); position:relative; z-index:1;">
+      <span style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.16em; color:#8A867D; margin-right:4px;">POWERED BY</span>
+      <span style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.02em; padding:8px 16px; border:1px solid rgba(255,255,255,.28); border-radius:999px; color:#F4F2EC;">Claude API</span>
+      <span style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.02em; padding:8px 16px; border:1px solid rgba(255,255,255,.28); border-radius:999px; color:#F4F2EC;">Deepgram API</span>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,6vw,80px); align-items:center; margin-top:clamp(48px,8vw,110px); position:relative; z-index:1;">
+      <!-- phone / video placeholder -->
+      <div data-reveal style="opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1); will-change:opacity,transform; justify-self:center; width:min(620px,90vw);">
+        <div style="position:relative; animation:mk-float 6s ease-in-out infinite;">
+          <div style="border:1px solid rgba(255,255,255,.22); border-radius:12px 12px 4px 4px; padding:6px 6px 7px; background:linear-gradient(#3A3B3F,#26272B); box-shadow:0 24px 60px rgba(0,0,0,.5);">
+            <div style="aspect-ratio:16/10; border-radius:5px; overflow:hidden; background:#141414;">
+              <video data-lazysrc="assets/auto-note-demo.mp4" loop muted playsinline preload="none" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.14); transform-origin:center;"></video>
+            </div>
+          </div>
+          <div style="position:relative; width:116%; left:-8%; height:15px; border-radius:0 0 14px 14px; background:linear-gradient(#4A4B50,#2C2D31); border:1px solid rgba(255,255,255,.2); border-top:none;"></div>
+          <div style="width:16%; height:5px; margin:0 auto; border-radius:0 0 6px 6px; background:rgba(255,255,255,.28);"></div>
+        </div>
+      </div>
+      <div data-reveal style="opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1) .12s, transform 1s cubic-bezier(.16,1,.3,1) .12s; will-change:opacity,transform;">
+        <p style="margin:0 0 22px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:500; font-size:clamp(22px,2.8vw,40px); line-height:1.3; letter-spacing:-0.01em;">予定を入れておくだけで、<br>ノートができている。</p>
+        <p style="margin:0; font-size:clamp(15px,1.2vw,18px); line-height:2; color:#C9C5BC;">登録したスケジュールに合わせて、録音から文字起こし、AIによるノート生成まで全自動。あなたは、ただ予定を入れておくだけ。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTO NOTE pinned flow -->
+  <section data-pin="auto" data-screen-label="AUTO NOTE — flow" style="background:#0C0C0C; color:#F4F2EC; height:300vh; position:relative;">
+    <div data-pin-inner style="position:sticky; top:0; height:100vh; display:flex; flex-direction:column; justify-content:center; padding:clamp(54px,9vh,96px) clamp(20px,4vw,52px) clamp(36px,5vh,64px); overflow:hidden;">
+      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:clamp(2px,0.6vh,8px);">
+        <span style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.2em; color:#8A867D;">HOW IT WORKS — 全自動の4ステップ</span>
+        <div style="width:clamp(120px,22vw,320px); height:2px; background:rgba(255,255,255,.16); position:relative;"><div data-autofill style="position:absolute; inset:0; background:var(--accent,#FB98A7); transform:scaleX(0); transform-origin:left;"></div></div>
+      </div>
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(18px,3vw,40px);">
+        <sc-for list="{{ autoSteps }}" as="step" hint-placeholder-count="3">
+          <div data-step style="opacity:0.25; transition:opacity .4s ease;">
+            <div style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.1em; color:var(--accent,#FB98A7); margin-bottom:18px;">{{ step.num }}</div>
+            <div style="height:2px; background:rgba(255,255,255,.16); margin-bottom:22px; position:relative;"><div data-stepbar style="position:absolute; inset:0; background:#F4F2EC; transform:scaleX(0); transform-origin:left;"></div></div>
+            <h3 style="margin:0 0 14px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:600; font-size:clamp(20px,2.4vw,34px); line-height:1.25;">{{ step.title }}</h3>
+            <p style="margin:0 0 18px; font-size:clamp(13px,1vw,16px); line-height:1.9; color:#C9C5BC;">{{ step.desc }}</p>
+            <div style="aspect-ratio:16/10; border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,.14); background:repeating-linear-gradient(135deg,#141414,#141414 9px,#191919 9px,#191919 18px); position:relative; display:flex; align-items:center; justify-content:center;">
+              <sc-if value="{{ step.hasVid }}" hint-placeholder-val="{{ false }}">
+                <video data-lazysrc="{{ step.vid }}" loop muted playsinline preload="none" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.14); transform-origin:center;"></video>
+              </sc-if>
+              <sc-if value="{{ step.noVid }}" hint-placeholder-val="{{ true }}">
+                <span style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#8A867D;">▶ DEMO</span>
+              </sc-if>
+              <div data-playbar style="position:absolute; left:0; bottom:0; height:3px; width:100%; background:var(--accent,#FB98A7); transform:scaleX(0); transform-origin:left;"></div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTO NOTE differentiator: design templates -->
+  <section data-pin="spread" data-screen-label="AUTO NOTE — templates" style="background:#0C0C0C; color:#F4F2EC; height:240vh; position:relative; border-bottom:1px solid rgba(255,255,255,.12);">
+    <div data-pin-inner style="position:sticky; top:0; height:100vh; display:flex; flex-direction:column; justify-content:center; padding:clamp(40px,7vh,90px) clamp(20px,4vw,52px); overflow:hidden;">
+    <div style="max-width:900px; margin-bottom:clamp(28px,5vh,56px);">
+      <div style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.2em; color:var(--accent,#FB98A7); margin-bottom:24px;">THE DIFFERENCE</div>
+      <h3 data-reveal style="margin:0 0 22px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:600; font-size:clamp(30px,5vw,76px); line-height:1.12; letter-spacing:-0.02em; opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1); will-change:opacity,transform;">無機質なノートは、<br>もう終わり。</h3>
+      <p style="margin:0; max-width:620px; font-size:clamp(15px,1.2vw,18px); line-height:2; color:#C9C5BC;">これまでの自動ノートは、味気ないテキストの羅列だけ。AUTO NOTE は、デザイン性あふれるテンプレートから好きな一冊を選ぶと、その世界観のままノートが生成されます。記録が、見返したくなるものに変わる。</p>
+    </div>
+    <div data-spread style="display:grid; grid-template-columns:repeat(6,1fr); gap:clamp(10px,1.4vw,20px); perspective:1200px;">
+      <div data-spread-card data-i="0" style="opacity:0; will-change:transform,opacity;">
+        <div style="aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,.14); background:#F4F2EC;"><img loading="lazy" decoding="async" src="assets/note-cornell.png" alt="CORNELL テンプレートで生成されたノート" style="width:100%; height:100%; object-fit:cover; object-position:top center; display:block;"></div>
+        <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#8A867D; margin-top:12px;">CORNELL</div>
+      </div>
+      <div data-spread-card data-i="1" style="opacity:0; will-change:transform,opacity;">
+        <div style="aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,.14); background:#F4F2EC;"><img loading="lazy" decoding="async" src="assets/note-editorial.png" alt="EDITORIAL テンプレートで生成されたノート" style="width:100%; height:100%; object-fit:cover; object-position:top center; display:block;"></div>
+        <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#8A867D; margin-top:12px;">EDITORIAL</div>
+      </div>
+      <div data-spread-card data-i="2" style="opacity:0; will-change:transform,opacity;">
+        <div style="aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,.14); background:#F4F2EC;"><img loading="lazy" decoding="async" src="assets/note-economist.png" alt="ECONOMIST テンプレートで生成されたノート" style="width:100%; height:100%; object-fit:cover; object-position:top center; display:block;"></div>
+        <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#8A867D; margin-top:12px;">ECONOMIST</div>
+      </div>
+      <div data-spread-card data-i="3" style="opacity:0; will-change:transform,opacity;">
+        <div style="aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,.14); background:#F4F2EC;"><img loading="lazy" decoding="async" src="assets/note-vocabgrid.png" alt="VOCABGRID テンプレートで生成されたノート" style="width:100%; height:100%; object-fit:cover; object-position:top center; display:block;"></div>
+        <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#8A867D; margin-top:12px;">VOCABGRID</div>
+      </div>
+      <div data-spread-card data-i="4" style="opacity:0; will-change:transform,opacity;">
+        <div style="aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,.14); background:#F4F2EC;"><img loading="lazy" decoding="async" src="assets/note-magazine.png" alt="MAGAZINE テンプレートで生成されたノート" style="width:100%; height:100%; object-fit:cover; object-position:top center; display:block;"></div>
+        <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#8A867D; margin-top:12px;">MAGAZINE</div>
+      </div>
+      <div data-spread-card data-i="5" style="opacity:0; will-change:transform,opacity;">
+        <div style="aspect-ratio:3/4; border-radius:10px; overflow:hidden; border:1px solid rgba(255,255,255,.14); background:#F4F2EC;"><img loading="lazy" decoding="async" src="assets/note-study.png" alt="STUDY テンプレートで生成されたノート" style="width:100%; height:100%; object-fit:cover; object-position:top center; display:block;"></div>
+        <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#8A867D; margin-top:12px;">STUDY</div>
+      </div>
+    </div>
+    </div>
+  </section>
+
+  <!-- AUTO NOTE feature: AI chat review -->
+  <section data-screen-label="AUTO NOTE — AI chat" style="background:#0C0C0C; color:#F4F2EC; padding:clamp(80px,14vh,180px) clamp(20px,4vw,52px); border-bottom:1px solid rgba(255,255,255,.12);">
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,6vw,80px); align-items:center;">
+      <div data-reveal style="opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1); will-change:opacity,transform;">
+        <div style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.2em; color:var(--accent,#FB98A7); margin-bottom:24px;">AI CHAT — 復習</div>
+        <h3 style="margin:0 0 22px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:600; font-size:clamp(28px,4.4vw,60px); line-height:1.16; letter-spacing:-0.02em;">ノートを<br>見返しながら、<br>AIに質問。</h3>
+        <p style="margin:0; max-width:540px; font-size:clamp(15px,1.2vw,18px); line-height:2; color:#C9C5BC;">授業のあとは、生成されたノートを見返しながら、わからなかった内容の質問や、ノートの修正をAIにチャット形式で投げかけられます。その場で疑問を解消して、学びをそのまま深められる。</p>
+      </div>
+      <div data-reveal style="opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1) .12s, transform 1s cubic-bezier(.16,1,.3,1) .12s; will-change:opacity,transform; justify-self:center; width:min(520px,82vw);">
+        <div style="position:relative; animation:mk-float 6s ease-in-out infinite;">
+          <div style="border:1px solid rgba(255,255,255,.22); border-radius:12px 12px 4px 4px; padding:6px 6px 7px; background:linear-gradient(#3A3B3F,#26272B); box-shadow:0 24px 60px rgba(0,0,0,.5);">
+            <div data-chat-demo style="aspect-ratio:16/10; border-radius:5px; overflow:hidden; background:#141414;">
+              <video data-lazysrc="assets/auto-note-chat.mp4" loop muted playsinline preload="none" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.14); transform-origin:center;"></video>
+            </div>
+          </div>
+          <div style="position:relative; width:116%; left:-8%; height:15px; border-radius:0 0 14px 14px; background:linear-gradient(#4A4B50,#2C2D31); border:1px solid rgba(255,255,255,.2); border-top:none;"></div>
+          <div style="width:16%; height:5px; margin:0 auto; border-radius:0 0 6px 6px; background:rgba(255,255,255,.28);"></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER / CONTACT ============ -->
+  <footer id="contact" data-screen-label="Contact" style="background:#F4F2EC; color:#0E0E0E; padding:clamp(70px,12vh,150px) clamp(20px,4vw,52px) clamp(36px,6vh,64px); display:flex; flex-direction:column; align-items:center; justify-content:center; min-height:100vh; gap:clamp(36px,7vh,80px);">
+    <div style="text-align:center;">
+      <h2 data-reveal style="margin:0; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:700; font-size:clamp(32px,6.5vw,96px); line-height:0.96; letter-spacing:-0.03em; opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1); will-change:opacity,transform;">Take a chance on me<span style="color:var(--accent,#FB98A7);">.</span></h2>
+    </div>
+
+    <!-- big magnetic contact button -->
+    <div data-mag-area style="display:flex; justify-content:center; align-items:center; width:100%; padding:clamp(20px,6vh,70px) 0;">
+      <a href="mailto:kaia76@icloud.com?subject=%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA%E3%82%B5%E3%82%A4%E3%83%88%E3%82%88%E3%82%8A%E3%81%94%E9%80%A3%E7%B5%A1" data-magnetic style="display:flex; align-items:center; justify-content:center; gap:clamp(16px,2.4vw,32px); width:min(560px,86vw); height:clamp(96px,15vh,160px); border-radius:999px; background:#0E0E0E; color:#F4F2EC; text-decoration:none; transition:transform .4s cubic-bezier(.2,.85,.2,1), background .3s ease; will-change:transform; cursor:pointer;" style-hover="background:var(--accent,#FB98A7);">
+        <span data-mag-label style="display:inline-flex; align-items:center; gap:clamp(12px,1.8vw,24px); font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(30px,5.5vw,68px); letter-spacing:0.02em; transition:transform .4s cubic-bezier(.2,.85,.2,1);">CONTACT<span style="font-size:0.7em; line-height:1;">→</span></span>
+      </a>
+    </div>
+
+    <div style="width:100%; display:flex; justify-content:space-between; align-items:flex-end; flex-wrap:wrap; gap:24px;">
+      <a href="mailto:kaia76@icloud.com?subject=%E3%83%9D%E3%83%BC%E3%83%88%E3%83%95%E3%82%A9%E3%83%AA%E3%82%AA%E3%82%B5%E3%82%A4%E3%83%88%E3%82%88%E3%82%8A%E3%81%94%E9%80%A3%E7%B5%A1" style="text-decoration:none; color:#0E0E0E; font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.08em; border-bottom:1px solid var(--accent,#FB98A7); padding-bottom:3px;">kaia76@icloud.com</a>
+      <div style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.14em; color:#6E6A62; text-align:right;">村澤渓花 — KEIKA MURASAWA<br>© 2026</div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;accent&quot;:{&quot;editor&quot;:&quot;color&quot;,&quot;default&quot;:&quot;#FB98A7&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;heroVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;editorial&quot;,&quot;kinetic&quot;,&quot;index&quot;],&quot;default&quot;:&quot;index&quot;,&quot;tsType&quot;:&quot;string&quot;},&quot;motionIntensity&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;full&quot;,&quot;subtle&quot;],&quot;default&quot;:&quot;full&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  rootRef = React.createRef();
+
+  renderVals() {
+    const accent = this.props.accent || '#FB98A7';
+    const variant = this.props.heroVariant || 'index';
+    return {
+      rootRef: this.rootRef,
+      accent,
+      isEditorial: variant === 'editorial',
+      isKinetic: variant === 'kinetic',
+      isIndex: variant === 'index',
+      autoSteps: [
+        { num: '01', title: 'スケジュール登録', desc: 'カレンダーに予定を入れておくだけ。会議も講義も、あとはアプリにおまかせ。', vid: 'assets/auto-note-schedule.mp4', hasVid: true, noVid: false },
+        { num: '02', title: '自動で録音・文字起こし', desc: '予定の時間になると自動でレコーディングを開始。録音中リアルタイムで文字起こしが表示される。', vid: 'assets/auto-note-rec.mp4', hasVid: true, noVid: false },
+        { num: '03', title: 'AIがノート生成', desc: '選んだノートテンプレートのデザインのまま、要点を整理したノートが完成する。', vid: 'assets/auto-note-generate.mp4', hasVid: true, noVid: false },
+      ],
+      typicGenres: [
+        { n: '01', t: 'Business', d: '交渉・会議・メールで使う実践英語' },
+        { n: '02', t: 'Lifestyle', d: '日常・旅行・健康のリアルな会話' },
+        { n: '03', t: 'Technology', d: 'AI・ガジェット・開発の最新トピック' },
+        { n: '04', t: 'Culture', d: '映画・音楽・アートを語る表現' },
+        { n: '05', t: 'News', d: '世界の今を、英語でキャッチアップ' },
+        { n: '06', t: 'Science', d: '宇宙・環境・人体のふしぎを英語で' },
+      ],
+      processSteps: [
+        { n: '01', t: 'Research', d: 'ユーザーと課題を観察し、本当に解くべき問題を見極める。' },
+        { n: '02', t: 'Define', d: '体験のコアを一文に絞り込み、何を捨てるかを決める。' },
+        { n: '03', t: 'Design', d: '余白とリズムで意味をつくる。手触りまで設計する。' },
+        { n: '04', t: 'Build', d: '自分の手で実装し、動くものとして検証する。' },
+        { n: '05', t: 'Ship', d: '届けて、計測して、また磨く。プロダクトに終わりはない。' },
+      ],
+    };
+  }
+
+  componentDidMount() {
+    const root = this.rootRef.current;
+    if (!root) return;
+    this._applyAccent();
+
+    // React drops the `muted` attribute, which blocks autoplay — force it via JS.
+    // Play from the top only once the laptop scrolls into view; pause when it leaves.
+    root.querySelectorAll('video').forEach((v) => {
+      v.muted = true; v.defaultMuted = true; v.playsInline = true; v.loop = true; v.pause();
+    });
+    this._videoIO = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        const v = e.target;
+        if (e.isIntersecting) {
+          if (!v.dataset.played) { v.currentTime = 0; v.dataset.played = '1'; }
+          v.play().catch(() => {});
+        } else {
+          v.pause();
+        }
+      });
+    }, { threshold: 0.45 });
+    root.querySelectorAll('video').forEach((v) => this._videoIO.observe(v));
+
+    // reveal-on-scroll (scroll-driven for reliability)
+    this._reveals = [];
+    this._seen = new WeakSet();
+    this._collectReveals();
+
+    const intensity = this.props.motionIntensity || 'full';
+    this._plx = intensity === 'full'
+      ? [...root.querySelectorAll('[data-parallax]')].map((el) => ({
+          el, speed: parseFloat(el.getAttribute('data-speed') || '0.1'),
+        }))
+      : [];
+    this._bar = root.querySelector('[data-bar]');
+    this._pins = [...root.querySelectorAll('[data-pin]')].map((wrap) => ({
+      wrap, kind: wrap.getAttribute('data-pin'),
+    }));
+    this._spread = root.querySelector('[data-spread]');
+    this._spreadCards = this._spread ? [...this._spread.querySelectorAll('[data-spread-card]')] : [];
+    this._typeBox = root.querySelector('[data-type-box]');
+    this._typeStarted = false;
+    this._initFlow(root);
+
+    this._tick = () => {
+      const st = window.scrollY || document.documentElement.scrollTop;
+      const docH = document.documentElement.scrollHeight - window.innerHeight;
+      const p = docH > 0 ? st / docH : 0;
+      if (this._bar) this._bar.style.transform = 'scaleX(' + p.toFixed(4) + ')';
+      const vh = window.innerHeight;
+      this._plx.forEach((o) => {
+        const r = o.el.getBoundingClientRect();
+        const off = (r.top + r.height / 2) - vh / 2;
+        o.el.style.transform = 'translate3d(0,' + (-off * o.speed).toFixed(2) + 'px,0)';
+      });
+      // reveal elements as they enter the viewport
+      if (this._reveals && this._reveals.length) {
+        const trigger = vh * 0.9;
+        this._reveals = this._reveals.filter((el) => {
+          const r = el.getBoundingClientRect();
+          if (r.top < trigger && r.bottom > 0) {
+            el.style.opacity = '1';
+            el.style.transform = 'none';
+            return false;
+          }
+          return true;
+        });
+      }
+      this._pins.forEach((pin) => this._updatePin(pin, st));
+      if (this._typeBox && !this._typeStarted) {
+        const tr = this._typeBox.getBoundingClientRect();
+        if (tr.top < vh * 0.82 && tr.bottom > 0) { this._typeStarted = true; this._runType(); }
+      }
+      this._raf = 0;
+    };
+    this._onScroll = () => { if (!this._raf) this._raf = requestAnimationFrame(this._tick); };
+    window.addEventListener('scroll', this._onScroll, { passive: true });
+    window.addEventListener('resize', this._onScroll);
+    this._tick();
+    // settle passes: re-collect + reveal after layout/fonts settle
+    [120, 400, 900].forEach((t) => setTimeout(() => { this._collectReveals(); this._tick(); }, t));
+
+    // magnetic contact button
+    const area = root.querySelector('[data-mag-area]');
+    const btn = root.querySelector('[data-magnetic]');
+    if (area && btn) {
+      const label = btn.querySelector('[data-mag-label]');
+      const S = 0.32;
+      this._magMove = (e) => {
+        const r = btn.getBoundingClientRect();
+        const dx = (e.clientX - (r.left + r.width / 2)) * S;
+        const dy = (e.clientY - (r.top + r.height / 2)) * S;
+        btn.style.transform = 'translate(' + dx.toFixed(1) + 'px,' + dy.toFixed(1) + 'px) scale(1.05)';
+        if (label) label.style.transform = 'translate(' + (dx * 0.32).toFixed(1) + 'px,' + (dy * 0.32).toFixed(1) + 'px)';
+      };
+      this._magLeave = () => {
+        btn.style.transform = 'translate(0,0) scale(1)';
+        if (label) label.style.transform = 'translate(0,0)';
+      };
+      this._magArea = area;
+      area.addEventListener('mousemove', this._magMove);
+      area.addEventListener('mouseleave', this._magLeave);
+    }
+  }
+
+  _updatePin(pin, st) {
+    const rectTop = pin.wrap.getBoundingClientRect().top + st;
+    const range = pin.wrap.offsetHeight - window.innerHeight;
+    const prog = Math.max(0, Math.min(1, (st - rectTop) / (range || 1)));
+    if (pin.kind === 'auto') {
+      const steps = pin.wrap.querySelectorAll('[data-step]');
+      const n = steps.length;
+      // finish all steps by 82% of the scroll, then hold the completed state
+      const fp = Math.min(1, prog / 0.82);
+      const active = Math.min(n - 1, Math.floor(fp * n));
+      steps.forEach((s, i) => {
+        s.style.opacity = i === active ? '1' : '0.25';
+        const bar = s.querySelector('[data-stepbar]');
+        if (bar) {
+          const local = Math.max(0, Math.min(1, fp * n - i));
+          bar.style.transform = 'scaleX(' + (i < active ? 1 : i === active ? local : 0).toFixed(3) + ')';
+          const pv = s.querySelector('[data-playbar]');
+          if (pv) pv.style.transform = 'scaleX(' + (i === active ? local : i < active ? 1 : 0).toFixed(3) + ')';
+        }
+      });
+      const fill = pin.wrap.querySelector('[data-autofill]');
+      if (fill) fill.style.transform = 'scaleX(' + fp.toFixed(3) + ')';
+    } else if (pin.kind === 'hscroll') {
+      const track = pin.wrap.querySelector('[data-track]');
+      if (track) {
+        const max = track.scrollWidth - window.innerWidth;
+        track.style.transform = 'translate3d(' + (-prog * Math.max(0, max)).toFixed(2) + 'px,0,0)';
+      }
+    } else if (pin.kind === 'spread') {
+      // remap so cards finish spreading before the pin releases (hold at the end)
+      this._applySpread(Math.min(1, prog / 0.86));
+    }
+  }
+
+  _runType() {
+    const box = this._typeBox;
+    if (!box) return;
+    const target = box.getAttribute('data-text') || '';
+    const out = box.querySelector('[data-typed]');
+    if (!out) return;
+    let i = 0;
+    const type = () => {
+      out.textContent = target.slice(0, i);
+      if (i < target.length) {
+        i++;
+        this._typeTimer = setTimeout(type, 62 + Math.random() * 55);
+      } else {
+        // reached the end — hold with the blinking cursor, then retype from the start
+        this._typeTimer = setTimeout(() => { i = 0; type(); }, 3000);
+      }
+    };
+    type();
+  }
+
+  _applySpread(p) {
+    if (!this._spreadCards.length) return;
+    const n = this._spreadCards.length;
+    const center = (n - 1) / 2;
+    const maxDelay = 0.62;  // last card starts opening at p=0.62
+    const span = 0.34;      // each card opens fast over this much progress
+    this._spreadCards.forEach((card, i) => {
+      const d = center - i;                       // signed distance from center
+      // unique rank so cards open ONE BY ONE, alternating center→out
+      const rank = Math.abs(d) * 2 + (d < 0 ? 1 : 0); // 1,2,3,4,5,6
+      const delay = ((rank - 1) / (n - 1)) * maxDelay;
+      const lp = Math.max(0, Math.min(1, (p - delay) / span));
+      const e = 1 - Math.pow(1 - lp, 3);          // easeOutCubic per card
+      const tx = d * 160 * (1 - e);               // pull toward center when collapsed
+      const ty = (1 - e) * 70;
+      const rot = -d * 13 * (1 - e);              // fan rotation
+      const sc = 0.5 + 0.5 * e;
+      card.style.transform = 'translate3d(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px,0) rotate(' + rot.toFixed(2) + 'deg) scale(' + sc.toFixed(3) + ')';
+      card.style.opacity = e.toFixed(3);
+      card.style.zIndex = String(10 - Math.abs(Math.round(d)));
+    });
+  }
+
+  _collectReveals() {
+    const root = this.rootRef.current;
+    if (!root || !this._seen) return;
+    const vh = window.innerHeight;
+    const trigger = vh * 0.9;
+    root.querySelectorAll('[data-reveal], [data-reveal-line]').forEach((el) => {
+      if (this._seen.has(el)) return;
+      this._seen.add(el);
+      const r = el.getBoundingClientRect();
+      if (r.top < trigger && r.bottom > 0) {
+        el.style.opacity = '1';
+        el.style.transform = 'none';
+      } else {
+        this._reveals.push(el);
+      }
+    });
+  }
+
+  _applyAccent() {
+    const root = this.rootRef.current;
+    if (root) root.style.setProperty('--accent', this.props.accent || '#FB98A7');
+  }
+
+  componentDidUpdate() { this._applyAccent(); this._collectReveals(); }
+
+  _initFlow(root) {
+    const canvas = root.querySelector('[data-flow-canvas]');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    // render at low internal resolution and let CSS upscale — orbs are soft so
+    // the blur is "free" and we paint ~1/9 the pixels of a full-DPR canvas
+    let w = 0, h = 0, scale = 0.34;
+    const orbs = [];
+    // soft palette — translucent pink, warm cream, faint ink
+    const palettes = [
+      [251, 152, 167],   // accent pink
+      [251, 152, 167],
+      [255, 214, 196],   // warm peach
+      [200, 224, 220],   // soft mint
+      [20, 20, 20],      // faint ink (kept very low alpha)
+    ];
+    const N = 7;
+    const resize = () => {
+      const r = canvas.getBoundingClientRect();
+      w = Math.max(1, Math.round(r.width * scale));
+      h = Math.max(1, Math.round(r.height * scale));
+      canvas.width = w; canvas.height = h;
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+    };
+    resize();
+    this._flowResize = resize;
+    window.addEventListener('resize', resize);
+    for (let i = 0; i < N; i++) {
+      const col = palettes[i % palettes.length];
+      const ink = col[0] === 20;
+      orbs.push({
+        x: Math.random() * w, y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.06, vy: (Math.random() - 0.5) * 0.06,
+        r: (Math.random() * 0.18 + 0.20) * Math.min(w, h),  // big soft radius
+        col, alpha: ink ? 0.05 : (Math.random() * 0.18 + 0.30),
+        ph: Math.random() * Math.PI * 2, sp: Math.random() * 0.0006 + 0.0003,
+      });
+    }
+    this._mouse = { x: -9999, y: -9999 };
+    this._flowMove = (e) => {
+      const r = canvas.getBoundingClientRect();
+      this._mouse.x = (e.clientX - r.left) * scale; this._mouse.y = (e.clientY - r.top) * scale;
+    };
+    root.querySelector('[data-hero-motion]').parentElement.addEventListener('mousemove', this._flowMove);
+    // pause the loop whenever the hero canvas is scrolled out of view
+    this._flowVisible = true;
+    this._flowIO = new IntersectionObserver((es) => {
+      this._flowVisible = es[0].isIntersecting;
+      if (this._flowVisible && !this._flowRaf) this._flowRaf = requestAnimationFrame(step);
+    }, { threshold: 0 });
+    this._flowIO.observe(canvas);
+    const step = (t) => {
+      if (!this._flowVisible) { this._flowRaf = 0; return; }
+      ctx.clearRect(0, 0, w, h);
+      ctx.globalCompositeOperation = 'source-over';
+      for (let i = 0; i < orbs.length; i++) {
+        const o = orbs[i];
+        // gentle cursor repulsion so orbs softly part around the pointer
+        const dxm = o.x - this._mouse.x, dym = o.y - this._mouse.y;
+        const dm = Math.hypot(dxm, dym);
+        if (dm < 90 && dm > 0.01) { o.vx += (dxm / dm) * 0.02; o.vy += (dym / dm) * 0.02; }
+        // slow breathing drift
+        o.x += o.vx + Math.cos(o.ph + (t || 0) * o.sp) * 0.06;
+        o.y += o.vy + Math.sin(o.ph + (t || 0) * o.sp) * 0.06;
+        o.vx *= 0.97; o.vy *= 0.97;
+        const m = o.r * 0.5;
+        if (o.x < -m) o.x = w + m; if (o.x > w + m) o.x = -m;
+        if (o.y < -m) o.y = h + m; if (o.y > h + m) o.y = -m;
+        const pulse = 1 + Math.sin(o.ph + (t || 0) * o.sp * 2) * 0.10;
+        const rr = o.r * pulse;
+        const g = ctx.createRadialGradient(o.x, o.y, 0, o.x, o.y, rr);
+        const c = o.col;
+        g.addColorStop(0, 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + o.alpha + ')');
+        g.addColorStop(0.55, 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',' + (o.alpha * 0.35) + ')');
+        g.addColorStop(1, 'rgba(' + c[0] + ',' + c[1] + ',' + c[2] + ',0)');
+        ctx.fillStyle = g;
+        ctx.beginPath(); ctx.arc(o.x, o.y, rr, 0, Math.PI * 2); ctx.fill();
+      }
+      this._flowRaf = requestAnimationFrame(step);
+    };
+    step(0);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this._onScroll);
+    window.removeEventListener('resize', this._onScroll);
+    if (this._flowResize) window.removeEventListener('resize', this._flowResize);
+    if (this._flowIO) this._flowIO.disconnect();
+    if (this._videoIO) this._videoIO.disconnect();
+    if (this._flowRaf) cancelAnimationFrame(this._flowRaf);
+    if (this._magArea) {
+      this._magArea.removeEventListener('mousemove', this._magMove);
+      this._magArea.removeEventListener('mouseleave', this._magLeave);
+    }
+    if (this._io) this._io.disconnect();
+    if (this._typeTimer) clearTimeout(this._typeTimer);
+    if (this._raf) cancelAnimationFrame(this._raf);
+  }
+}
+</script>
+</body>
+</html>
