@@ -4,57 +4,6 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <script src="./support.js"></script>
-<style>
-  /* ===== レスポンシブ対応（スマホ・タブレット） ===== */
-  @media (max-width: 768px) {
-    /* 横スクロールを防止（この画面幅ではsticky演出を解除済みなので安全） */
-    html, body { max-width: 100%; overflow-x: hidden; }
-
-    /* --- 2〜3カラムのグリッドを縦積みに --- */
-    div[style*="grid-template-columns:1.1fr 1fr"],
-    div[style*="grid-template-columns:1.5fr 1fr"],
-    div[style*="grid-template-columns:1fr 1fr"] {
-      grid-template-columns: 1fr !important;
-    }
-    /* AUTO NOTE フロー：3ステップを縦並びに */
-    div[style*="grid-template-columns:repeat(3,1fr)"] {
-      grid-template-columns: 1fr !important;
-      gap: 28px !important;
-    }
-    /* ノートテンプレート：6枚→3枚並びに */
-    div[style*="grid-template-columns:repeat(6,1fr)"] {
-      grid-template-columns: repeat(3, 1fr) !important;
-    }
-
-    /* --- ピン留めスクロール演出を解除し、通常スクロールで流す --- */
-    [data-pin] { height: auto !important; }
-    [data-pin-inner] {
-      position: static !important;
-      height: auto !important;
-      min-height: 0 !important;
-      justify-content: flex-start !important;
-    }
-
-    /* --- スクロール演出で薄くなる要素を、スマホでは確実に表示 --- */
-    [data-step] { opacity: 1 !important; }
-    [data-spread-card] { opacity: 1 !important; transform: none !important; }
-
-    /* About のサイド情報をスマホでは固定しない */
-    aside[data-reveal] { position: static !important; top: auto !important; }
-
-    /* ナビの余白を詰める */
-    nav { padding-left: 18px !important; padding-right: 18px !important; }
-  }
-
-  @media (max-width: 480px) {
-    /* 小さい画面ではノートテンプレートを2枚並びに */
-    div[style*="grid-template-columns:repeat(6,1fr)"] {
-      grid-template-columns: repeat(2, 1fr) !important;
-    }
-    /* ナビのリンク間隔を少し詰める */
-    nav > div { gap: 12px !important; }
-  }
-</style>
 </head>
 <body>
 <x-dc>
@@ -76,6 +25,15 @@
   @keyframes mk-spin-rev { from { transform: rotate(0deg); } to { transform: rotate(-360deg); } }
   @keyframes mk-dash { to { stroke-dashoffset: -1000; } }
   @keyframes mk-pulse { 0%,100% { transform: scale(1); opacity:0.5; } 50% { transform: scale(1.35); opacity:0.9; } }
+  @media (max-width: 768px) {
+    [data-r="stack"] { grid-template-columns: 1fr !important; gap: 32px !important; }
+    [data-r="steps"] { grid-template-columns: 1fr !important; gap: 26px !important; max-width: 460px; margin-left: auto !important; margin-right: auto !important; }
+    [data-r="stephead"] { max-width: 460px; margin-left: auto !important; margin-right: auto !important; }
+    [data-spread] { grid-template-columns: repeat(2, 1fr) !important; gap: 14px !important; }
+    [data-r="aside"] { position: static !important; top: auto !important; margin-top: 14px; }
+    [data-r="br-m"] { display: none !important; }
+    [data-r="up"] { order: -1; }
+  }
 </style>
 </helmet>
 
@@ -100,7 +58,7 @@
 
   <!-- ============ HERO : INDEX ============ -->
   <sc-if value="{{ isIndex }}" hint-placeholder-val="{{ false }}">
-  <section data-screen-label="Hero — Index" style="min-height:100vh; padding:clamp(56px,9vh,86px) clamp(20px,4vw,52px) clamp(4px,1vh,10px); display:flex; flex-direction:column; justify-content:flex-start; gap:clamp(48px,9vh,112px); position:relative; overflow:hidden; background:#F4F2EC;">
+  <section data-r="hero" data-screen-label="Hero — Index" style="min-height:100vh; padding:clamp(56px,9vh,86px) clamp(20px,4vw,52px) clamp(4px,1vh,10px); display:flex; flex-direction:column; justify-content:flex-start; gap:clamp(48px,9vh,112px); position:relative; overflow:hidden; background:#F4F2EC;">
     <div data-hero-motion style="position:absolute; inset:0; z-index:0; pointer-events:none; overflow:hidden;">
       <canvas data-flow-canvas style="position:absolute; inset:0; width:100%; height:100%; opacity:0.95;"></canvas>
       <div data-parallax data-speed="0.06" style="position:absolute; right:-10vw; top:8vh; width:42vw; height:42vw; max-width:560px; max-height:560px; border-radius:50%; background:radial-gradient(circle at 35% 35%, rgba(251,152,167,0.42), rgba(251,152,167,0) 70%); animation:mk-drift1 26s ease-in-out infinite; will-change:transform;"></div>
@@ -113,7 +71,7 @@
         <span aria-label="Murasawa Keika" style="display:flex; justify-content:space-between; width:100%; font-family:'Space Grotesk',sans-serif; font-weight:700; font-size:clamp(22px,3.4vw,52px); line-height:1; color:#FFFFFF;"><span>M</span><span>u</span><span>r</span><span>a</span><span>s</span><span>a</span><span>w</span><span>a</span><span style="flex:0 0 0.55em;"></span><span>K</span><span>e</span><span>i</span><span>k</span><span>a</span></span>
       </div>
     </div>
-    <div style="display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(28px,5vw,72px); align-items:end; position:relative; z-index:1;">
+    <div data-r="stack" style="display:grid; grid-template-columns:1.1fr 1fr; gap:clamp(28px,5vw,72px); align-items:end; position:relative; z-index:1;">
       <h1 style="margin:0; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:700; font-size:clamp(48px,9vw,150px); line-height:0.9; letter-spacing:-0.02em;">My<br>Portfolio<span style="color:var(--accent,#FB98A7);">.</span></h1>
       <div style="display:flex; flex-direction:column;">
         <div style="display:flex; align-items:center; gap:14px; margin-bottom:16px;">
@@ -140,7 +98,7 @@
       <span style="display:block; overflow:hidden; padding-bottom:0.06em;"><span data-reveal-line style="display:inline-block; opacity:0; transform:translateY(105%); transition:opacity .9s cubic-bezier(.16,1,.3,1) .3s, transform .9s cubic-bezier(.16,1,.3,1) .3s; will-change:opacity,transform;">エンジニアを目指しています。</span></span>
     </h2>
 
-    <div style="display:grid; grid-template-columns:1.5fr 1fr; gap:clamp(36px,7vw,110px); align-items:start;">
+    <div data-r="stack" style="display:grid; grid-template-columns:1.5fr 1fr; gap:clamp(36px,7vw,110px); align-items:start;">
       <div style="opacity:1;">
         <p data-reveal style="margin:0 0 32px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:500; font-size:clamp(19px,1.9vw,28px); line-height:1.55; color:#0E0E0E; letter-spacing:-0.01em; opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.16,1,.3,1) 0s, transform .7s cubic-bezier(.16,1,.3,1) 0s; will-change:opacity,transform;">誰かの「<span style="color:#1B3A6B;">不便</span>」を「<span style="color:var(--accent,#FB98A7);">便利</span>」に変えるアプリをつくりたい。</p>
         <p data-reveal style="margin:0 0 20px; font-size:clamp(15px,1.25vw,18px); line-height:2; color:#3A3833; opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.16,1,.3,1) .1s, transform .7s cubic-bezier(.16,1,.3,1) .1s; will-change:opacity,transform;">私は農業関連企業で働く中で、紙や電話、手作業による管理など、アナログな業務が多く残る現場を数多く経験してきました。一方で、ITを活用することで業務効率や情報共有が大きく改善される場面も目の当たりにし、技術の力で人の役に立つ仕組みをつくりたいと考えるようになりました。</p>
@@ -150,7 +108,7 @@
         <p data-reveal style="margin:0; font-size:clamp(15px,1.25vw,18px); line-height:2; color:#3A3833; opacity:0; transform:translateY(30px); transition:opacity .7s cubic-bezier(.16,1,.3,1) .5s, transform .7s cubic-bezier(.16,1,.3,1) .5s; will-change:opacity,transform;">これからも学び続ける姿勢を大切にしながら、利用者視点で本当に価値のあるサービスを生み出せるエンジニアを目指しています。</p>
       </div>
 
-      <aside data-reveal style="position:sticky; top:96px; opacity:0; transform:translateY(38px); transition:opacity .8s cubic-bezier(.16,1,.3,1) .7s, transform .8s cubic-bezier(.16,1,.3,1) .7s; will-change:opacity,transform;">
+      <aside data-reveal data-r="aside" style="position:sticky; top:96px; opacity:0; transform:translateY(38px); transition:opacity .8s cubic-bezier(.16,1,.3,1) .7s, transform .8s cubic-bezier(.16,1,.3,1) .7s; will-change:opacity,transform;">
         <div style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.2em; color:var(--accent,#FB98A7); margin-bottom:18px;">STACK</div>
         <div style="display:flex; flex-wrap:wrap; gap:8px; margin-bottom:clamp(30px,4vw,44px);">
           <span style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.02em; padding:9px 16px; border:1px solid rgba(14,14,14,.22); border-radius:999px;">Java</span>
@@ -186,21 +144,21 @@
       <span style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.02em; padding:8px 16px; border:1px solid rgba(255,255,255,.28); border-radius:999px; color:#F4F2EC;">Deepgram API</span>
     </div>
 
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,6vw,80px); align-items:center; margin-top:clamp(48px,8vw,110px); position:relative; z-index:1;">
+    <div data-r="stack" style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,6vw,80px); align-items:center; margin-top:clamp(48px,8vw,110px); position:relative; z-index:1;">
       <!-- phone / video placeholder -->
       <div data-reveal style="opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1); will-change:opacity,transform; justify-self:center; width:min(620px,90vw);">
         <div style="position:relative; animation:mk-float 6s ease-in-out infinite;">
           <div style="border:1px solid rgba(255,255,255,.22); border-radius:12px 12px 4px 4px; padding:6px 6px 7px; background:linear-gradient(#3A3B3F,#26272B); box-shadow:0 24px 60px rgba(0,0,0,.5);">
             <div style="aspect-ratio:16/10; border-radius:5px; overflow:hidden; background:#141414;">
-              <video src="assets/auto-note-demo.mp4" loop muted playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.14); transform-origin:center;"></video>
+              <video src="assets/auto-note-demo.mp4" loop muted playsinline preload="auto" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.14); transform-origin:center;"></video>
             </div>
           </div>
           <div style="position:relative; width:116%; left:-8%; height:15px; border-radius:0 0 14px 14px; background:linear-gradient(#4A4B50,#2C2D31); border:1px solid rgba(255,255,255,.2); border-top:none;"></div>
           <div style="width:16%; height:5px; margin:0 auto; border-radius:0 0 6px 6px; background:rgba(255,255,255,.28);"></div>
         </div>
       </div>
-      <div data-reveal style="opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1) .12s, transform 1s cubic-bezier(.16,1,.3,1) .12s; will-change:opacity,transform;">
-        <p style="margin:0 0 22px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:500; font-size:clamp(22px,2.8vw,40px); line-height:1.3; letter-spacing:-0.01em;">予定を入れておくだけで、<br>ノートができている。</p>
+      <div data-reveal data-r="up" style="opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1) .12s, transform 1s cubic-bezier(.16,1,.3,1) .12s; will-change:opacity,transform;">
+        <p style="margin:0 0 22px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:600; font-size:clamp(28px,4.4vw,60px); line-height:1.16; letter-spacing:-0.02em;">予定を入れておくだけで、<br>ノートができている。</p>
         <p style="margin:0; font-size:clamp(15px,1.2vw,18px); line-height:2; color:#C9C5BC;">登録したスケジュールに合わせて、録音から文字起こし、AIによるノート生成まで全自動。あなたは、ただ予定を入れておくだけ。</p>
       </div>
     </div>
@@ -209,11 +167,10 @@
   <!-- AUTO NOTE pinned flow -->
   <section data-pin="auto" data-screen-label="AUTO NOTE — flow" style="background:#0C0C0C; color:#F4F2EC; height:300vh; position:relative;">
     <div data-pin-inner style="position:sticky; top:0; height:100vh; display:flex; flex-direction:column; justify-content:center; padding:clamp(54px,9vh,96px) clamp(20px,4vw,52px) clamp(36px,5vh,64px); overflow:hidden;">
-      <div style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:clamp(2px,0.6vh,8px);">
-        <span style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.2em; color:#8A867D;">HOW IT WORKS — 全自動の4ステップ</span>
-        <div style="width:clamp(120px,22vw,320px); height:2px; background:rgba(255,255,255,.16); position:relative;"><div data-autofill style="position:absolute; inset:0; background:var(--accent,#FB98A7); transform:scaleX(0); transform-origin:left;"></div></div>
+      <div data-r="stephead" style="display:flex; justify-content:space-between; align-items:baseline; margin-bottom:clamp(2px,0.6vh,8px);">
+        <span style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.2em; color:#8A867D;">HOW IT WORKS — 全自動の3ステップ</span>
       </div>
-      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(18px,3vw,40px);">
+      <div data-r="steps" style="display:grid; grid-template-columns:repeat(3,1fr); gap:clamp(18px,3vw,40px);">
         <sc-for list="{{ autoSteps }}" as="step" hint-placeholder-count="3">
           <div data-step style="opacity:0.25; transition:opacity .4s ease;">
             <div style="font-family:'Space Mono',monospace; font-size:13px; letter-spacing:0.1em; color:var(--accent,#FB98A7); margin-bottom:18px;">{{ step.num }}</div>
@@ -222,7 +179,7 @@
             <p style="margin:0 0 18px; font-size:clamp(13px,1vw,16px); line-height:1.9; color:#C9C5BC;">{{ step.desc }}</p>
             <div style="aspect-ratio:16/10; border-radius:8px; overflow:hidden; border:1px solid rgba(255,255,255,.14); background:repeating-linear-gradient(135deg,#141414,#141414 9px,#191919 9px,#191919 18px); position:relative; display:flex; align-items:center; justify-content:center;">
               <sc-if value="{{ step.hasVid }}" hint-placeholder-val="{{ false }}">
-                <video src="{{ step.vid }}" loop muted playsinline preload="metadata" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.14); transform-origin:center;"></video>
+                <video src="{{ step.vid }}" loop muted playsinline preload="auto" style="position:absolute; inset:0; width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.14); transform-origin:center;"></video>
               </sc-if>
               <sc-if value="{{ step.noVid }}" hint-placeholder-val="{{ true }}">
                 <span style="font-family:'Space Mono',monospace; font-size:11px; letter-spacing:0.12em; color:#8A867D;">▶ DEMO</span>
@@ -274,17 +231,17 @@
 
   <!-- AUTO NOTE feature: AI chat review -->
   <section data-screen-label="AUTO NOTE — AI chat" style="background:#0C0C0C; color:#F4F2EC; padding:clamp(80px,14vh,180px) clamp(20px,4vw,52px); border-bottom:1px solid rgba(255,255,255,.12);">
-    <div style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,6vw,80px); align-items:center;">
+    <div data-r="stack" style="display:grid; grid-template-columns:1fr 1fr; gap:clamp(32px,6vw,80px); align-items:center;">
       <div data-reveal style="opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1), transform 1s cubic-bezier(.16,1,.3,1); will-change:opacity,transform;">
         <div style="font-family:'Space Mono',monospace; font-size:12px; letter-spacing:0.2em; color:var(--accent,#FB98A7); margin-bottom:24px;">AI CHAT — 復習</div>
-        <h3 style="margin:0 0 22px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:600; font-size:clamp(28px,4.4vw,60px); line-height:1.16; letter-spacing:-0.02em;">ノートを<br>見返しながら、<br>AIに質問。</h3>
-        <p style="margin:0; max-width:540px; font-size:clamp(15px,1.2vw,18px); line-height:2; color:#C9C5BC;">授業のあとは、生成されたノートを見返しながら、わからなかった内容の質問や、ノートの修正をAIにチャット形式で投げかけられます。その場で疑問を解消して、学びをそのまま深められる。</p>
+        <h3 style="margin:0 0 22px; font-family:'Space Grotesk','Noto Sans JP',sans-serif; font-weight:600; font-size:clamp(28px,4.4vw,60px); line-height:1.16; letter-spacing:-0.02em;">ノートを<br data-r="br-m">見返しながら、<br>AIに質問。</h3>
+        <p style="margin:0; max-width:620px; font-size:clamp(15px,1.2vw,18px); line-height:2; color:#C9C5BC;">授業のあとは、生成されたノートを見返しながら、わからなかった内容の質問や、ノートの修正をAIにチャット形式で投げかけられます。その場で疑問を解消して、学びをそのまま深められる。</p>
       </div>
       <div data-reveal style="opacity:0; transform:translateY(38px); transition:opacity 1s cubic-bezier(.16,1,.3,1) .12s, transform 1s cubic-bezier(.16,1,.3,1) .12s; will-change:opacity,transform; justify-self:center; width:min(520px,82vw);">
         <div style="position:relative; animation:mk-float 6s ease-in-out infinite;">
           <div style="border:1px solid rgba(255,255,255,.22); border-radius:12px 12px 4px 4px; padding:6px 6px 7px; background:linear-gradient(#3A3B3F,#26272B); box-shadow:0 24px 60px rgba(0,0,0,.5);">
             <div data-chat-demo style="aspect-ratio:16/10; border-radius:5px; overflow:hidden; background:#141414;">
-              <video src="assets/auto-note-chat.mp4" loop muted playsinline preload="metadata" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.14); transform-origin:center;"></video>
+              <video src="assets/auto-note-chat.mp4" loop muted playsinline preload="auto" style="width:100%; height:100%; object-fit:cover; display:block; transform:scale(1.14); transform-origin:center;"></video>
             </div>
           </div>
           <div style="position:relative; width:116%; left:-8%; height:15px; border-radius:0 0 14px 14px; background:linear-gradient(#4A4B50,#2C2D31); border:1px solid rgba(255,255,255,.2); border-top:none;"></div>
@@ -386,9 +343,22 @@ class Component extends DCLogic {
         }))
       : [];
     this._bar = root.querySelector('[data-bar]');
-    this._pins = [...root.querySelectorAll('[data-pin]')].map((wrap) => ({
-      wrap, kind: wrap.getAttribute('data-pin'),
-    }));
+    this._allPins = [...root.querySelectorAll('[data-pin]')].map((wrap) => {
+      const inner = wrap.querySelector('[data-pin-inner]');
+      return {
+        wrap, kind: wrap.getAttribute('data-pin'), origH: wrap.style.height,
+        inner,
+        innerPos: inner ? inner.style.position : '',
+        innerH: inner ? inner.style.height : '',
+        innerJC: inner ? inner.style.justifyContent : '',
+      };
+    });
+    this._pins = this._allPins;
+    this._mobileMQ = window.matchMedia('(max-width: 768px)');
+    this._onMQ = () => this._reconcileLayout();
+    if (this._mobileMQ.addEventListener) this._mobileMQ.addEventListener('change', this._onMQ);
+    else if (this._mobileMQ.addListener) this._mobileMQ.addListener(this._onMQ);
+    this._reconcileLayout();
     this._spread = root.querySelector('[data-spread]');
     this._spreadCards = this._spread ? [...this._spread.querySelectorAll('[data-spread-card]')] : [];
     this._typeBox = root.querySelector('[data-type-box]');
@@ -487,6 +457,72 @@ class Component extends DCLogic {
     } else if (pin.kind === 'spread') {
       // remap so cards finish spreading before the pin releases (hold at the end)
       this._applySpread(Math.min(1, prog / 0.86));
+    }
+  }
+
+  // On phones the tall pinned "auto" (steps) and "spread" (cards) sections can't
+  // fit their side-by-side sticky layout — flatten them into normal vertical
+  // stacks with all content visible.
+  _reconcileLayout() {
+    if (!this._allPins) return;
+    const m = this._mobileMQ ? this._mobileMQ.matches : false;
+    this._isMobile = m;
+    const next = [];
+    this._allPins.forEach((pin) => {
+      const flat = m && (pin.kind === 'auto' || pin.kind === 'spread');
+      if (flat) this._flattenPin(pin);
+      else { this._restorePin(pin); next.push(pin); }
+    });
+    this._pins = next;
+    if (this._tick) this._tick();
+  }
+
+  _flattenPin(pin) {
+    const wrap = pin.wrap;
+    wrap.style.height = 'auto';
+    const inner = pin.inner || wrap.querySelector('[data-pin-inner]');
+    if (inner) { inner.style.position = 'static'; inner.style.height = 'auto'; inner.style.justifyContent = 'flex-start'; }
+    wrap.querySelectorAll('[data-step]').forEach((s) => {
+      s.style.opacity = '1';
+      const b = s.querySelector('[data-stepbar]'); if (b) b.style.transform = 'scaleX(1)';
+      const p = s.querySelector('[data-playbar]'); if (p) p.style.transform = 'scaleX(1)';
+    });
+    const fill = wrap.querySelector('[data-autofill]'); if (fill) fill.style.transform = 'scaleX(1)';
+    wrap.querySelectorAll('[data-spread-card]').forEach((c, i) => {
+      // light, quick scroll-reveal for the 6 note cards on mobile
+      c.style.transition = 'opacity .5s ease, transform .55s cubic-bezier(.16,1,.3,1)';
+      c.style.transitionDelay = ((i % 2) * 0.06).toFixed(2) + 's';
+      if (!c.dataset.shown) { c.style.opacity = '0'; c.style.transform = 'translateY(22px)'; }
+      this._ensureMobReveal();
+      this._mobReveal.observe(c);
+    });
+  }
+
+  _ensureMobReveal() {
+    if (this._mobReveal) return;
+    this._mobReveal = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (!e.isIntersecting) return;
+        const c = e.target;
+        c.style.opacity = '1';
+        c.style.transform = 'translateY(0)';
+        c.dataset.shown = '1';
+        this._mobReveal.unobserve(c);
+      });
+    }, { threshold: 0.18 });
+  }
+
+  _restorePin(pin) {
+    const wrap = pin.wrap;
+    wrap.style.height = pin.origH || '';
+    const inner = pin.inner || wrap.querySelector('[data-pin-inner]');
+    if (inner) { inner.style.position = pin.innerPos || ''; inner.style.height = pin.innerH || ''; inner.style.justifyContent = pin.innerJC || ''; }
+    if (pin.kind === 'spread') {
+      // drop the mobile reveal transition so desktop scrubbing stays frame-tight
+      wrap.querySelectorAll('[data-spread-card]').forEach((c) => {
+        c.style.transition = ''; c.style.transitionDelay = '';
+        if (this._mobReveal) this._mobReveal.unobserve(c);
+      });
     }
   }
 
@@ -652,6 +688,11 @@ class Component extends DCLogic {
       this._magArea.removeEventListener('mousemove', this._magMove);
       this._magArea.removeEventListener('mouseleave', this._magLeave);
     }
+    if (this._mobileMQ && this._onMQ) {
+      if (this._mobileMQ.removeEventListener) this._mobileMQ.removeEventListener('change', this._onMQ);
+      else if (this._mobileMQ.removeListener) this._mobileMQ.removeListener(this._onMQ);
+    }
+    if (this._mobReveal) this._mobReveal.disconnect();
     if (this._io) this._io.disconnect();
     if (this._typeTimer) clearTimeout(this._typeTimer);
     if (this._raf) cancelAnimationFrame(this._raf);
